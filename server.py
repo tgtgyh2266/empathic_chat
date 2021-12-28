@@ -22,7 +22,7 @@ import googletrans
 #########################################################################################################
 
 SAVE_PATH_RET = 'retrieval_model_mpnet'   # path to retrieval model
-SAVE_PATH_EMO = 'go_emo/roberta_5epochs/checkpoint-16281'   # path to emotion_classification model
+SAVE_PATH_EMO = 'emo_model_roberta'   # path to emotion_classification model
 RET_FILE_PATH = 'pruned_train.csv' # path to retrieval dataset
 
 label_dict = {0:'positive', 1:'negative', 2:'ambiguous'}
