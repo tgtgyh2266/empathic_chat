@@ -28,8 +28,8 @@ import googletrans
 #   After providing empathy response, if no other keywords are detected in the next input, we provide encouragement response. Same for advice response.
 #########################################################################################################
 
-SAVE_PATH_GEN = 'model_neg_only/checkpoint-7623'   # path to generative model
-SAVE_PATH_EMO = '../retrieval_emo_sup/go_emo/roberta_5epochs/checkpoint-16281'   # path to emotion_classification model
+SAVE_PATH_GEN = 'model_generatvie'   # path to generative model
+SAVE_PATH_EMO = 'emo_model_roberta'   # path to emotion_classification model
 
 greeting_input = ['你好', '嗨', '哈囉', 'hi', 'Hi', 'HI']
 goodbye_input = ['再見', '掰掰', 'Bye', 'bye']
