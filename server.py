@@ -9,7 +9,8 @@ import pandas as pd
 from transformers import RobertaTokenizer, RobertaForSequenceClassification
 from transformers import BlenderbotTokenizer, BlenderbotForConditionalGeneration
 from transformers import AutoModelForCausalLM, AutoTokenizer
-import googletrans
+# import googletrans
+from deep_translator import GoogleTranslator
 
 #########################################################################################################
 #   total gpu memory cost : almost 4G
@@ -28,8 +29,8 @@ import googletrans
 #   After providing empathy response, if no other keywords are detected in the next input, we provide encouragement response. Same for advice response.
 #########################################################################################################
 
-SAVE_PATH_GEN = 'model_generatvie'   # path to generative model
-SAVE_PATH_EMO = 'emo_model_roberta'   # path to emotion_classification model
+SAVE_PATH_GEN = 'model_neg_only/checkpoint-7623'   # path to generative model
+SAVE_PATH_EMO = '../retrieval_emo_sup/go_emo/roberta_5epochs/checkpoint-16281'   # path to emotion_classification model
 
 greeting_input = ['你好', '嗨', '哈囉', 'hi', 'Hi', 'HI']
 goodbye_input = ['再見', '掰掰', 'Bye', 'bye']
@@ -75,7 +76,7 @@ model_gen.eval()
 
 input_context = []
 total_length = 0
-translator = googletrans.Translator()
+# translator = googletrans.Translator()
 
 class web_server_template:  ##宣告一個class,在下文的web.application實例化時，會根據定義將對應的url連接到這個class
     def __init__(self):  ##初始化類別
@@ -142,11 +143,13 @@ class web_server_template:  ##宣告一個class,在下文的web.application實�
                     used_response_num[i] += 1
                     prev_keyword_idx = i
                     text = received_data
-                    text = translator.translate(text, dest='en').text
+                    # text = translator.translate(text, dest='en').text
+                    text = GoogleTranslator(source='auto', target='en').translate(text)
                     input_context.append(text)
                     total_length += len(text)
                     text = passing_information
-                    text = translator.translate(text, dest='en').text
+                    # text = translator.translate(text, dest='en').text
+                    text = GoogleTranslator(source='auto', target='en').translate(text)
                     total_length += len(text)
                     input_context.append(text)
                     has_keyword = True
@@ -157,11 +160,13 @@ class web_server_template:  ##宣告一個class,在下文的web.application實�
                 passing_information = template_responses[prev_keyword_idx][used_response_num[prev_keyword_idx]]
                 used_response_num[prev_keyword_idx] += 1
                 text = received_data
-                text = translator.translate(text, dest='en').text
+                # text = translator.translate(text, dest='en').text
+                text = GoogleTranslator(source='auto', target='en').translate(text)
                 input_context.append(text)
                 total_length += len(text)
                 text = passing_information
-                text = translator.translate(text, dest='en').text
+                # text = translator.translate(text, dest='en').text
+                text = GoogleTranslator(source='auto', target='en').translate(text)
                 total_length += len(text)
                 input_context.append(text)
                 has_keyword = True
@@ -169,7 +174,9 @@ class web_server_template:  ##宣告一個class,在下文的web.application實�
         if not has_keyword:
             prev_keyword_idx = -1
             text = received_data
-            text = translator.translate(text, dest='en').text
+            # text = translator.translate(text, dest='en').text
+            if not text.isdigit():
+                text = GoogleTranslator(source='auto', target='en').translate(text)
 
             input_context.append(text)
             total_length += len(text)
@@ -210,7 +217,9 @@ class web_server_template:  ##宣告一個class,在下文的web.application實�
             print(res)
             input_context.append(res)
             total_length += len(res)
-            res = translator.translate(res, dest='zh-tw').text
+            # res = translator.translate(res, dest='zh-tw').text
+            if not res.isdigit():
+                res = GoogleTranslator(source='auto', target='zh-tw').translate(res)
             print(res)
             passing_information = res
 
