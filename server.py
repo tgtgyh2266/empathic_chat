@@ -42,7 +42,6 @@ with open('template.json', newline='', encoding="utf-8") as f:
 key_words = []
 template_responses = []
 prev_keyword_idx = -1
-used_response_num = [0]*len(key_words)
 for key in template:
     key_words.append(key)
     temp_list = []
@@ -53,6 +52,7 @@ for key in template:
     if len(template[key]['advice'])>0:
         temp_list.append(template[key]['advice'][0])
     template_responses.append(temp_list)
+used_response_num = [0]*len(key_words)
 
 label_dict = {0:'positive', 1:'negative', 2:'ambiguous'}
 random_seed = 87
